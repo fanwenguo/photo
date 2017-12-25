@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+         html,
+    body {
+        margin: 0;
+        height: 100%;
+    }
+    div {
+        border: 1px solid;
+    }
+    #container {
+        height: 100%;
+    }
+    #div1 {
+        display: none;
+        position: absolute;
+        background: #AAA;
+        top: 0;
+        left: 0;
+        min-width: 300px;
+    }
+    #div1 div.left {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+    }
+    #div1 div.right {
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+    }
+    .current {
+        margin-left: 100px
+    }
+    </style>
+</head>
+<body>
+     <div id='container'>
+        <a class="photo" i='1' href="/css/img/a.png">aaaaaaaaaaaaa</a>
+        <br/>
+        <a class="photo" i='2' href="/css/img/c.png">bbbbbbbbbbbbb</a>
+        <br/>
+        <a class="photo" i='3' href="/css/img/m.png">cccccccccccccc</a>
+        <br/>
+        <a class="photo" i='4' href="/css/img/p.png">ddddddddddddd</a>
+        <br/>
+
+    </div>
+
+    <div id='div1'>
+        <div id="left" class="left"> 上一张</div>
+        <div>
+            <span class="current">0</span>/<span class="total">0</span> <a class="close" href='javascript:void(0);'>关闭</a>
+            <br />
+            <img id='img1' src="/css/img/p.png" i='0' />
+            <br />
+            <span class="current">0</span>/<span class="total">0</span> <a class="close" href='javascript:void(0);'>关闭</a>
+        </div>
+        <div id="right" class="right">下一张</div>
+    </div>
+
+    <script src="js/zepto.js"></script>
+    <script src="js/touch.js"></script>
+    <script>
+    var photoCount = $(".photo").length;
+    $(".total").text(photoCount);
+
+    var click = "click";
+    if ("ontouchend" in document) {
+        click = "tap";
+    }
+
+    $(".photo").on(click, function() {
+        showPhoto($(this));
+        return false;
+    });
+
+
+    $("#left").on(click, prev);
+    $("body").swipeRight(prev);
+
+    function prev() {
+        var i = parseInt($("#img1").attr("i")) - 1;
+        if (i > 0) {
+            var prev = $('.photo[i="' + i + '"]');
+            showPhoto(prev);
+        }
+    }
+
+
+    $("body").swipeLeft(next);
+    $("#right").on(click, next);
+
+    function next() {
+        var i = parseInt($("#img1").attr("i")) + 1;
+        if (i <= photoCount) {
+            var next = $('.photo[i="' + i + '"]');
+            showPhoto(next);
+        }
+    }
+
+    function showPhoto(a) {
+        $('#div1').show();
+        var src = a.attr("href");
+        if (src) {
+            var i = a.attr("i");
+            $("#img1").attr("src", src);
+            $("#img1").attr("i", i);
+            $(".current").text(i);
+            return true;
+        }
+        return false;
+    }
+
+    $("#container,.close").on(click, function() {
+        $('#div1').hide();
+    });
+    // $("#container").click(function() {
+    //     $('#div1').hide();
+    // });
+    </script>
+</body>
+</html>
